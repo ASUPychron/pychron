@@ -17,7 +17,9 @@
 # ============= enthought library imports =======================
 from __future__ import absolute_import
 
+from pyface.image_resource import ImageResource
 from pyface.tasks.action.schema import SToolBar
+from pyface.tasks.action.task_action import TaskAction
 from pyface.tasks.task_layout import TaskLayout, PaneItem
 from traits.api import Instance
 
@@ -83,17 +85,36 @@ class ExtractionLineTask(BaseHardwareTask):
     def enable_auto_reload(self):
         self.manager.enable_auto_reload()
 
+    # tool_bars = [
+    #     SToolBar(SampleLoadingAction()),
+    #     SToolBar(AutoReloadAction()),
+    #
+    # ]
+    tool_bars = [
+        SToolBar(
+            TaskAction(
+                method='open',
+                tooltip='Open a file',
+                image=ImageResource('document_open'),
+            ),
+            TaskAction(
+                method='save',
+                tooltip='Save the current file',
+                image=ImageResource('document_save'),
+            ),
+        ),]
     # defaults
-    def _tool_bars_default(self):
-        tb = SToolBar(
-            SampleLoadingAction(),
-            # IsolateChamberAction(),
-            # EvacuateChamberAction(),
-            # FinishChamberChangeAction(),
-            image_size=(16, 16),
-        )
-        tb2 = SToolBar(AutoReloadAction())
-        return [tb, tb2]
+    # def _tool_bars_default(self):
+    #     tb = SToolBar(
+    #         SampleLoadingAction(),
+    #         # IsolateChamberAction(),
+    #         # EvacuateChamberAction(),
+    #         # FinishChamberChangeAction(),
+    #         image_size=(16, 16),
+    #     )
+    #     tb2 = SToolBar(AutoReloadAction())
+    #     print(tb, tb2)
+    #     return [tb, tb2]
 
     def _default_layout_default(self):
         return TaskLayout(

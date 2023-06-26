@@ -14,9 +14,11 @@
 # limitations under the License.
 # ===============================================================================
 # ============= enthought library imports =======================
+from chaco.overlays.text_box_overlay import TextBoxOverlay
+from chaco.plots.lineplot import LinePlot
+# from chaco.plots.lineplot import LinePlot
+# from chaco.text_box_overlay import TextBoxOverlay
 
-from chaco.lineplot import LinePlot
-from chaco.text_box_overlay import TextBoxOverlay
 from enable.component_editor import ComponentEditor
 from numpy import linspace
 from traits.api import List, Any, Event, Callable, Dict, Int, Bool

@@ -20,8 +20,8 @@
 # ============= local library imports  ==========================
 from __future__ import absolute_import
 
-from chaco.lineplot import LinePlot
-from chaco.scatterplot import ScatterPlot
+from chaco.plots.lineplot import LinePlot
+from chaco.plots.scatterplot import ScatterPlot
 
 from pychron.graph.error_bar_overlay import ErrorBarOverlay
 from pychron.pipeline.plot.overlays.base_inset import BaseInset

@@ -17,7 +17,7 @@
 # ============= enthought library imports =======================
 from math import isinf
 
-from chaco.legend import Legend
+from chaco.overlays.legend import Legend
 from numpy import inf
 from traits.api import HasTraits, Any, List, Str, Event
 

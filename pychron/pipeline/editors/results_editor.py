@@ -18,8 +18,8 @@
 from itertools import groupby
 from operator import attrgetter
 
-from chaco.scatter_inspector_overlay import ScatterInspectorOverlay
-from chaco.scatterplot import ScatterPlot
+from chaco.overlays.scatter_inspector_overlay import ScatterInspectorOverlay
+from chaco.plots.scatterplot import ScatterPlot
 from enable.component_editor import ComponentEditor
 from numpy import poly1d, linspace
 from traits.api import (

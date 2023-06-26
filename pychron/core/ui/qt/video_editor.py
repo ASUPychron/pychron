@@ -16,8 +16,8 @@
 
 import vlc
 from PyQt5.QtWidgets import QLabel
-from traitsui.qt4.basic_editor_factory import BasicEditorFactory
-from traitsui.qt4.editor import Editor
+from traitsui.qt.basic_editor_factory import BasicEditorFactory
+from traitsui.qt.editor import Editor
 
 from traits.api import Any
 

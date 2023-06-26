@@ -17,7 +17,7 @@
 
 # =============enthought library imports=======================
 
-from chaco.scatterplot import ScatterPlot
+from chaco.plots.scatterplot import ScatterPlot
 from numpy import Inf
 from traits.api import Bool, on_trait_change, Event, Int
 

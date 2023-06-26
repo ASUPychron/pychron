@@ -15,7 +15,7 @@
 # ===============================================================================
 
 # ============= enthought library imports =======================
-from chaco.plot_label import PlotLabel
+from chaco.overlays.plot_label import PlotLabel
 from traits.api import Instance, on_trait_change
 
 # ============= standard library imports ========================

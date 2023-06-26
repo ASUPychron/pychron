@@ -15,8 +15,8 @@
 # ===============================================================================
 
 # ============= enthought library imports =======================
-from chaco.data_label import DataLabel
-from chaco.plot_label import PlotLabel
+from chaco.overlays.data_label import DataLabel
+from chaco.overlays.plot_label import PlotLabel
 
 # ============= standard library imports ========================
 from numpy import max

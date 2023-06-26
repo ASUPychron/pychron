@@ -1,5 +1,7 @@
 from __future__ import absolute_import
-from chaco.plot_label import PlotLabel
+
+from chaco.overlays.plot_label import PlotLabel
+# from chaco.overlays.plot_label import PlotLabel
 from traits.api import Int
 
 

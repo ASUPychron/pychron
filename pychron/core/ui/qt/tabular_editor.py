@@ -38,13 +38,13 @@ from traits.api import (
 )
 from traitsui.api import Item, TabularEditor, Handler
 from traitsui.mimedata import PyMimeData
-from traitsui.qt4.tabular_editor import (
+from traitsui.qt.tabular_editor import (
     TabularEditor as qtTabularEditor,
     _TableView as TableView,
     HeaderEventFilter,
     _ItemDelegate,
 )
-from traitsui.qt4.tabular_model import TabularModel, tabular_mime_type
+from traitsui.qt.tabular_model import TabularModel, tabular_mime_type
 
 from pychron.core.helpers.ctx_managers import no_update
 from pychron.core.helpers.traitsui_shortcuts import okcancel_view
