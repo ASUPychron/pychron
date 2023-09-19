@@ -183,7 +183,7 @@ class BaseEurotherm(HasTraits):
     def get_process_value(self, **kw):
         """ """
         resp = self._query("PV", **kw)
-        if self.protocol == 'modbus':
+        if self.protocol == "modbus":
             if resp:
                 resp = float(resp[0])
 
@@ -225,25 +225,24 @@ class BaseEurotherm(HasTraits):
         # fc = resp[2:4]
         nbytes_read = int(resp[4:6])
         words = []
-        for i in range(nbytes_read//2):
+        for i in range(nbytes_read // 2):
             start = 6 + (i * 4)
-            words.append(int(resp[start: start+4], 16))
+            words.append(int(resp[start : start + 4], 16))
 
         return words
 
     def _modbus_build_query(self, cmd, nwords=1):
         parameter_address = 0
-        if cmd == 'PV':
+        if cmd == "PV":
             parameter_address = 1
-        function_code = '03'
-        packet = f'{self.device_address:02X}{function_code:02X}{parameter_address:02X}{nwords:02X}'
+        function_code = "03"
+        packet = f"{self.device_address:02X}{function_code:02X}{parameter_address:02X}{nwords:02X}"
         cksum = calculate_cksum(packet)
 
-        return f'{packet}{cksum}'
+        return f"{packet}{cksum}"
 
     # ei_bisynch
     def _ei_bisynch_build_command(self, cmd, value):
-
         gid = str(self.GID)
         uid = str(self.UID)
         v = str(value)
@@ -307,14 +306,15 @@ class BaseEurotherm(HasTraits):
         if self.setpoint_min <= v < self.setpoint_max:
             return v
 
-if __name__ == '__main__':
-    resp = '02030400b200d8694e'
+
+if __name__ == "__main__":
+    resp = "02030400b200d8694e"
     device_address = resp[0:2]
     fc = resp[2:4]
     nbytes_read = int(resp[4:6])
     words = []
-    for i in range(nbytes_read//2):
+    for i in range(nbytes_read // 2):
         start = 6 + (i * 4)
-        words.append(int(resp[start: start+4], 16))
+        words.append(int(resp[start : start + 4], 16))
     print(words)
 # ============= EOF =============================================
