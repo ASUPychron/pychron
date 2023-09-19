@@ -72,6 +72,10 @@ def get_pid_parameters(v):
         #     return pa,
 
 
+def calculate_cksum(p):
+    return chr(reduce(lambda x, y: x ^ y, [ord(pi) for pi in p[1:]]))
+
+
 @provides(IFurnaceController)
 class BaseEurotherm(HasTraits):
     """
@@ -87,6 +91,8 @@ class BaseEurotherm(HasTraits):
     GID = 0
     UID = 1
     protocol = "ei_bisynch"
+
+    device_address = "01"
 
     output_value = Float
     process_value = Float
@@ -177,6 +183,10 @@ class BaseEurotherm(HasTraits):
     def get_process_value(self, **kw):
         """ """
         resp = self._query("PV", **kw)
+        if self.protocol == 'modbus':
+            if resp:
+                resp = float(resp[0])
+
         try:
             self.process_value = resp
         except TraitError:
@@ -206,10 +216,33 @@ class BaseEurotherm(HasTraits):
             resp = parser(resp)
         return resp
 
+    # modbus
+    def _modbus_build_command(self, cmd, value):
+        pass
+
+    def _modbus_parse_response(self, resp):
+        # device_address = resp[0:2]
+        # fc = resp[2:4]
+        nbytes_read = int(resp[4:6])
+        words = []
+        for i in range(nbytes_read//2):
+            start = 6 + (i * 4)
+            words.append(int(resp[start: start+4], 16))
+
+        return words
+
+    def _modbus_build_query(self, cmd, nwords=1):
+        parameter_address = 0
+        if cmd == 'PV':
+            parameter_address = 1
+        function_code = '03'
+        packet = f'{self.device_address:02X}{function_code:02X}{parameter_address:02X}{nwords:02X}'
+        cksum = calculate_cksum(packet)
+
+        return f'{packet}{cksum}'
+
     # ei_bisynch
     def _ei_bisynch_build_command(self, cmd, value):
-        def calculate_cksum(p):
-            return chr(reduce(lambda x, y: x ^ y, [ord(pi) for pi in p[1:]]))
 
         gid = str(self.GID)
         uid = str(self.UID)
@@ -274,5 +307,14 @@ class BaseEurotherm(HasTraits):
         if self.setpoint_min <= v < self.setpoint_max:
             return v
 
-
+if __name__ == '__main__':
+    resp = '02030400b200d8694e'
+    device_address = resp[0:2]
+    fc = resp[2:4]
+    nbytes_read = int(resp[4:6])
+    words = []
+    for i in range(nbytes_read//2):
+        start = 6 + (i * 4)
+        words.append(int(resp[start: start+4], 16))
+    print(words)
 # ============= EOF =============================================
