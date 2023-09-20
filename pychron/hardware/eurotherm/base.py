@@ -196,13 +196,13 @@ class BaseEurotherm(HasTraits):
 
     def _command_ask(self, *args, **kw):
         if self.protocol == "modbus":
-            return self.read(*args, **kw)
+            return self.write(*args, **kw)
         else:
             return self.ask(*args, **kw)
 
     def _query_ask(self, *args, **kw):
         if self.protocol == "modbus":
-            return self.write(*args, **kw)
+            return self.read(*args, **kw)
         else:
             return self.ask(*args, **kw)
 
