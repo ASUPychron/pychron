@@ -73,7 +73,7 @@ def get_pid_parameters(v):
 
 
 def calculate_cksum(p):
-    return chr(reduce(lambda x, y: x ^ y, [ord(pi) for pi in p[1:]]))
+    return reduce(lambda x, y: x ^ y, [ord(pi) for pi in p[1:]])
 
 
 @provides(IFurnaceController)
@@ -182,11 +182,11 @@ class BaseEurotherm(HasTraits):
 
     def get_process_value(self, **kw):
         """ """
-        if self.protocol == "modbus":
-            # cmd = self._modbus_build_query('PV')
-            resp = self.read(1, response_type="float", **kw)
-        else:
-            resp = self._query("PV", **kw)
+        # if self.protocol == 'modbus':
+        #     resp = self.read(1, response_type='int', **kw)
+        # else:
+
+        resp = self._query("PV", **kw)
         try:
             self.process_value = resp
         except TraitError:
@@ -194,10 +194,22 @@ class BaseEurotherm(HasTraits):
 
         return resp
 
+    def _command_ask(self, *args, **kw):
+        if self.protocol == 'modbus':
+            return self.read(*args, **kw)
+        else:
+            return self.ask(*args, **kw)
+
+    def _query_ask(self, *args, **kw):
+        if self.protocol == 'modbus':
+            return self.write(*args, **kw)
+        else:
+            return self.ask(*args, **kw)
+
     # private
     def _command(self, cmd, v, **kw):
         builder = getattr(self, "_{}_build_command".format(self.protocol))
-        resp = self.ask(
+        resp = self._command_ask(
             builder(cmd, v), read_terminator=ACK, terminator_position=0, **kw
         )
         parser = getattr(self, "_{}_parse_command_response".format(self.protocol))
@@ -209,37 +221,36 @@ class BaseEurotherm(HasTraits):
     def _query(self, cmd, **kw):
         builder = getattr(self, "_{}_build_query".format(self.protocol))
 
-        resp = self.ask(builder(cmd), **kw)
+        args, nkw = builder(cmd)
+        kw.update(nkw)
+        resp = self._query_ask(*args, **kw)
 
         parser = getattr(self, "_{}_parse_response".format(self.protocol))
         if not self.simulation:
-            resp = parser(resp)
+            resp = parser(resp, cmd)
         return resp
 
     # modbus
     def _modbus_build_command(self, cmd, value):
         pass
 
-    def _modbus_parse_response(self, resp):
+    def _modbus_parse_response(self, resp, cmd):
         # device_address = resp[0:2]
         # fc = resp[2:4]
-        nbytes_read = int(resp[4:6])
-        words = []
-        for i in range(nbytes_read // 2):
-            start = 6 + (i * 4)
-            words.append(int(resp[start : start + 4], 16))
+        # nbytes_read = int(resp[4:6])
+        # words = []
+        # for i in range(nbytes_read // 2):
+        #     start = 6 + (i * 4)
+        #     words.append(int(resp[start : start + 4], 16))
 
-        return words
+        return resp
 
     def _modbus_build_query(self, cmd, nwords=1):
         parameter_address = 0
         if cmd == "PV":
             parameter_address = 1
-        function_code = "03"
-        packet = f"{self.device_address:02X}{function_code:02X}{parameter_address:02X}{nwords:02X}"
-        cksum = calculate_cksum(packet)
 
-        return f"{packet}{cksum}"
+        return (parameter_address,), {"response_type": 'int'}
 
     # ei_bisynch
     def _ei_bisynch_build_command(self, cmd, value):
@@ -260,7 +271,7 @@ class BaseEurotherm(HasTraits):
 
         return "".join((EOT, gid, gid, uid, uid, s, ENQ))
 
-    def _ei_bisynch_parse_response(self, resp):
+    def _ei_bisynch_parse_response(self, resp, cmd):
         """ """
         if resp is not None:
             resp = resp.strip()
@@ -282,7 +293,7 @@ class BaseEurotherm(HasTraits):
 
         return resp
 
-    def _ei_bisynch_parse_command_response(self, resp):
+    def _ei_bisynch_parse_command_response(self, resp, cmd):
         """ """
         return resp == ACK
 
