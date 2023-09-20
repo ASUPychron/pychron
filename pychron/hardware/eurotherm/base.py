@@ -195,13 +195,13 @@ class BaseEurotherm(HasTraits):
         return resp
 
     def _command_ask(self, *args, **kw):
-        if self.protocol == 'modbus':
+        if self.protocol == "modbus":
             return self.read(*args, **kw)
         else:
             return self.ask(*args, **kw)
 
     def _query_ask(self, *args, **kw):
-        if self.protocol == 'modbus':
+        if self.protocol == "modbus":
             return self.write(*args, **kw)
         else:
             return self.ask(*args, **kw)
@@ -250,7 +250,7 @@ class BaseEurotherm(HasTraits):
         if cmd == "PV":
             parameter_address = 1
 
-        return (parameter_address,), {"response_type": 'int'}
+        return (parameter_address,), {"response_type": "int"}
 
     # ei_bisynch
     def _ei_bisynch_build_command(self, cmd, value):
