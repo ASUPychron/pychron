@@ -182,11 +182,11 @@ class BaseEurotherm(HasTraits):
 
     def get_process_value(self, **kw):
         """ """
-        resp = self._query("PV", **kw)
-        if self.protocol == "modbus":
-            if resp:
-                resp = float(resp[0])
-
+        if self.protocol == 'modbus':
+            # cmd = self._modbus_build_query('PV')
+            resp = self.read(1, response_type='float', **kw)
+        else:
+            resp = self._query("PV", **kw)
         try:
             self.process_value = resp
         except TraitError:
