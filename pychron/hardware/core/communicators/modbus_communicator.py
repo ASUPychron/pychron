@@ -44,6 +44,7 @@ class ModbusCommunicator(SerialCommunicator):
         """ """
         super(ModbusCommunicator, self).load(config, path)
         self.set_attribute(config, "slave_address", "Communications", "slave_address")
+        self.set_attribute(config, 'device_word_order', 'Communications', 'device_word_order')
 
     def write(
         self, register, value, nregisters=1, response_type="register_write", **kw
