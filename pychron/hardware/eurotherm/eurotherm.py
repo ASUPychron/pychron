@@ -33,6 +33,7 @@ from pychron.hardware.core.core_device import CoreDevice
 from pychron.hardware.eurotherm.base import BaseEurotherm
 from traitsui.api import Group, UItem, RangeEditor
 
+
 class Eurotherm(BaseEurotherm, CoreDevice):
     """
     :::
@@ -47,13 +48,14 @@ class Eurotherm(BaseEurotherm, CoreDevice):
         return self.process_setpoint
 
     def get_control_group(self, *args, **kw):
-        return Group(UItem('process_setpoint'),
-                     UItem(
-                         "process_value",
-                         editor=LCDEditor(width=120, height=30),
-                         style="readonly",
-                     ))
-
+        return Group(
+            UItem("process_setpoint"),
+            UItem(
+                "process_value",
+                editor=LCDEditor(width=120, height=30),
+                style="readonly",
+            ),
+        )
 
 
 # ============= EOF ====================================
