@@ -27,9 +27,11 @@ http://eurotherm.com/document-library/?ignoreeveryonegroup=0&assetdetesctl139041
 # ============= standard library imports ========================
 # ============= local library imports  ==========================
 from __future__ import absolute_import
+
+from pychron.core.ui.lcd_editor import LCDEditor
 from pychron.hardware.core.core_device import CoreDevice
 from pychron.hardware.eurotherm.base import BaseEurotherm
-
+from traitsui.api import Group, UItem, RangeEditor
 
 class Eurotherm(BaseEurotherm, CoreDevice):
     """
@@ -43,6 +45,15 @@ class Eurotherm(BaseEurotherm, CoreDevice):
 
     def get_setpoint(self, *args, **kw):
         return self.process_setpoint
+
+    def get_control_group(self, *args, **kw):
+        return Group(UItem('process_setpoint'),
+                     UItem(
+                         "process_value",
+                         editor=LCDEditor(width=120, height=30),
+                         style="readonly",
+                     ))
+
 
 
 # ============= EOF ====================================
