@@ -209,8 +209,10 @@ class BaseEurotherm(HasTraits):
     # private
     def _command(self, cmd, v, **kw):
         builder = getattr(self, "_{}_build_command".format(self.protocol))
+        args, nkw = builder(cmd)
+        kw.update(nkw)
         resp = self._command_ask(
-            builder(cmd, v), read_terminator=ACK, terminator_position=0, **kw
+            args, read_terminator=ACK, terminator_position=0, **kw
         )
         parser = getattr(self, "_{}_parse_command_response".format(self.protocol))
 
