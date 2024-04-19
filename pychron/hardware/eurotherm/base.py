@@ -211,7 +211,9 @@ class BaseEurotherm(HasTraits):
         builder = getattr(self, "_{}_build_command".format(self.protocol))
         args, nkw = builder(cmd, v)
         kw.update(nkw)
-        resp = self._command_ask(*args, read_terminator=ACK, terminator_position=0, **kw)
+        resp = self._command_ask(
+            *args, read_terminator=ACK, terminator_position=0, **kw
+        )
         parser = getattr(self, "_{}_parse_command_response".format(self.protocol))
 
         if not self.simulation:
