@@ -24,7 +24,7 @@ from pychron.hardware.base_cryo_controller import BaseCryoController
 
 class SI9700Controller(BaseCryoController):
     scan_func = "update"
-    setpoint = Float
+    setpoint = Float(enter_set=True, auto_set=False, desc="Setpoint")
     readback = Float
 
     def update(self, **kw):
@@ -49,6 +49,9 @@ class SI9700Controller(BaseCryoController):
         if resp:
             cmd, value = resp.split(" ")
             return value.strip()
+
+    def _setpoint_changed(self):
+        self._write_setpoint(self.setpoint)
 
     @get_float(default=0)
     def _read_input(self, ch, **kw):
