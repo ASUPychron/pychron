@@ -196,7 +196,7 @@ class BaseCoreDevice(HasCommunicator, ConsumerMixin):
     @crc_caller
     def write(self, *args, **kw):
         """ """
-        self.tell(*args, **kw)
+        return self.tell(*args, **kw)
 
     @crc_caller
     def tell(self, *args, **kw):
