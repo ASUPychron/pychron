@@ -232,7 +232,10 @@ class BaseEurotherm(HasTraits):
 
     # modbus
     def _modbus_build_command(self, cmd, value):
-        pass
+        parameter_address = 0
+        if cmd == "SL":
+            parameter_address = 2
+        return (parameter_address, value), {}
 
     def _modbus_parse_response(self, resp, cmd):
         # device_address = resp[0:2]
