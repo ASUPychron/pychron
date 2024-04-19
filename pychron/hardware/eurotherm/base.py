@@ -239,6 +239,9 @@ class BaseEurotherm(HasTraits):
             parameter_address = 2
         return (parameter_address, value), {}
 
+    def _modbus_parse_command_response(self, resp):
+        return resp
+
     def _modbus_parse_response(self, resp, cmd):
         # device_address = resp[0:2]
         # fc = resp[2:4]
