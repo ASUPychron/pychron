@@ -321,6 +321,7 @@ class Span(Line):
 
 
 class LoadIndicator(Circle):
+    corrected_position = None
     degas_indicator = False
     measured_indicator = False
     monitor_indicator = False
@@ -426,6 +427,13 @@ class LoadIndicator(Circle):
         nr = r * 0.25
 
         super(LoadIndicator, self)._render(gc)
+        if self.corrected_position:
+            ox, oy = self.canvas.map_screen([self.corrected_position])[0]
+            with gc:
+                gc.set_stroke_color((0, 0.75, 0))
+                gc.arc(ox, oy, r, 0, 360)
+                gc.stroke_path()
+
         if self.monitor_indicator:
             with gc:
                 gc.set_line_width(1)
